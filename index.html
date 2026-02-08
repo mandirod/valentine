@@ -352,6 +352,14 @@
       }, 300);
     }
 
+    /* --- GROW YES BUTTON LOGIC --- */
+    let yesScale = 1;
+
+    function growYes() {
+      yesScale += 0.2; // Increase scale
+      yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
+    }
+
     /* --- NO BUTTON LOGIC (Runs Away) --- */
     function clamp(n, min, max) {
       return Math.max(min, Math.min(max, n));
@@ -376,6 +384,9 @@
       noBtn.style.left = newLeft + "px";
       noBtn.style.top = newTop + "px";
       noBtn.style.transform = "none";
+
+      // GROW YES BUTTON WHEN NO RUNS AWAY
+      growYes();
     }
 
     zone.addEventListener("pointermove", e => {
