@@ -54,7 +54,7 @@
       margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
-      border-radius: 50%; /* Makes the image circular */
+      border-radius: 50%;
       object-fit: cover;
     }
 
@@ -136,12 +136,13 @@
 
   <main class="card">
     <img 
+      id="topImage"
       class="art" 
       src="https://m.media-amazon.com/images/I/51+S6u+aqOL._AC_SL400_.jpg" 
       alt="Valentine Art"
     />
 
-    <h1>Gael, will you be my Valentine?</h1>
+    <h1 id="questionText">Gael, will you be my Valentine?</h1>
 
     <section class="button-zone" id="zone">
       <button id="yesBtn">Yes</button>
@@ -151,6 +152,7 @@
     <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
     <section class="result" id="result">
+      <h2>YAY! 🎉</h2>
       <img
         class="cute-gif"
         src="https://media1.tenor.com/m/RiZpodi6JD0AAAAC/fast-cat-cat-excited.gif"
@@ -165,6 +167,10 @@
     const noBtn = document.getElementById("noBtn");
     const result = document.getElementById("result");
     const hint = document.getElementById("hint");
+    
+    // Elements to hide
+    const topImage = document.getElementById("topImage");
+    const questionText = document.getElementById("questionText");
 
     /* ---------- CONFETTI ---------- */
     const confettiCanvas = document.getElementById("confettiCanvas");
@@ -259,9 +265,15 @@
 
     /* ---------- YES CLICK ---------- */
     yesBtn.addEventListener("click", () => {
+      // Hide everything from the "Question" phase
       zone.style.display = "none";
       hint.style.display = "none";
+      topImage.style.display = "none";     // Hides the Amazon image
+      questionText.style.display = "none"; // Hides the "Will you be..." text
+      
+      // Show the result
       result.style.display = "block";
+      
       resizeConfettiCanvas();
       fullScreenConfetti();
     });
