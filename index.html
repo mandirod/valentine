@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine?</title>
 
-  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -116,10 +115,11 @@
       margin: 10px 0;
     }
 
-    .fireworks {
+    .cute-gif {
       width: min(380px, 90vw);
       margin: 0 auto;
       display: block;
+      border-radius: 12px; /* Adds nice rounded corners to the gif */
     }
 
     @keyframes pop {
@@ -133,7 +133,6 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="card">
-    <!-- ANIMAL WITH HEART -->
     <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="fur" x1="0" x2="1">
@@ -178,15 +177,14 @@
       <button id="noBtn">No</button>
     </section>
 
-    <!-- HINT -->
     <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
     <section class="result" id="result">
       <h2>YAY! 🎉</h2>
       <img
-        class="fireworks"
-        src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-        alt="Fireworks"
+        class="cute-gif"
+        src="https://media.giphy.com/media/xT0xeuOy2Fcl9vDGiA/giphy.gif"
+        alt="Pusheen Love"
       />
     </section>
   </main>
@@ -292,7 +290,7 @@
     /* ---------- YES CLICK ---------- */
     yesBtn.addEventListener("click", () => {
       zone.style.display = "none";
-      hint.style.display = "none";     // HIDE THE HINT
+      hint.style.display = "none";
       result.style.display = "block";
       resizeConfettiCanvas();
       fullScreenConfetti();
@@ -300,6 +298,3 @@
   </script>
 </body>
 </html>
-
-
-
