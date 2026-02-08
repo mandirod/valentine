@@ -318,6 +318,13 @@
       }, 300);
     }
 
+    /* ---------- YES BUTTON GROWS ---------- */
+    let yesScale = 1;
+    function growYes() {
+      yesScale = Math.min(2.2, yesScale + 0.1);
+      yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
+    }
+    
     /* --- NO BUTTON LOGIC (Runs Away) --- */
     function clamp(n, min, max) {
       return Math.max(min, Math.min(max, n));
