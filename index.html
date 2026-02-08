@@ -49,6 +49,7 @@
       text-align: center;
       box-shadow: 0 18px 60px rgba(0,0,0,.15);
       transition: height 0.3s ease;
+      position: relative;
     }
 
     .art {
@@ -74,10 +75,8 @@
       touch-action: none;
     }
 
+    /* General Button Style */
     button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
       padding: 16px 24px;
       font-size: 18px;
       font-weight: 800;
@@ -90,7 +89,11 @@
       transition: transform .12s ease, background .12s ease;
     }
 
+    /* YES / NO Specifics */
     #yesBtn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       left: 18%;
       background: var(--yes);
       color: #fff;
@@ -98,6 +101,9 @@
     #yesBtn:hover { background: var(--yesHover); }
 
     #noBtn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       left: 62%;
       background: #e5e7eb;
       color: #111827;
@@ -130,10 +136,10 @@
 
     /* NEXT BUTTON STYLING */
     #nextBtn {
-      position: relative; /* Overrides absolute from generic button rule */
+      position: relative;
       top: auto;
-      transform: none;
       left: auto;
+      transform: none;
       background: var(--yes);
       color: white;
       margin-top: 20px;
@@ -171,6 +177,7 @@
       border-radius: 8px;
       font-size: 16px;
       color: #555;
+      font-family: inherit;
     }
 
     .plan-activity {
@@ -179,6 +186,7 @@
       border: 2px solid #ffd6e7;
       border-radius: 8px;
       font-size: 16px;
+      font-family: inherit;
     }
 
     .plan-activity:focus, .plan-time:focus {
@@ -186,13 +194,34 @@
       border-color: var(--yes);
     }
 
-    .save-msg {
-      text-align: center;
-      color: var(--yes);
-      font-weight: bold;
-      margin-top: 15px;
-      opacity: 0;
-      transition: opacity 0.5s;
+    /* Controls for Add/Remove */
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .control-btn {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      padding: 10px 20px;
+      font-size: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #addSlotBtn {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    #removeSlotBtn {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     @keyframes pop {
@@ -222,39 +251,41 @@
     </div>
 
     <section class="result" id="result">
-      <h2>YAY! 🎉</h2>
+      <h2>Now you are stuck with meeeee!</h2>
       <img
         class="cute-gif"
         src="https://media1.tenor.com/m/RiZpodi6JD0AAAAC/fast-cat-cat-excited.gif"
         alt="Excited Cat"
       />
-      <button id="nextBtn">Plan Our Date ➡️</button>
+      <button id="nextBtn">Plan Our Date</button>
     </section>
 
-    <section class="itinerary" id="itinerary">
-      <h2>Our Valentine's Plan 📝</h2>
+    <section class="itinerary" id="itinerarySection">
+      <h2>Our Valentine's Plan</h2>
       
-      <div class="plan-row">
-        <input type="time" class="plan-time" value="18:00">
-        <input type="text" class="plan-activity" placeholder="Pick me up! 🚗">
+      <div id="slotsContainer">
+        <div class="plan-row">
+          <input type="time" class="plan-time" value="18:00">
+          <input type="text" class="plan-activity" placeholder="Pick me up! 🚗">
+        </div>
+
+        <div class="plan-row">
+          <input type="time" class="plan-time" value="19:00">
+          <input type="text" class="plan-activity" placeholder="Dinner reservation 🍝">
+        </div>
+
+        <div class="plan-row">
+          <input type="time" class="plan-time" value="21:00">
+          <input type="text" class="plan-activity" placeholder="Movie / Activity 🎬">
+        </div>
       </div>
 
-      <div class="plan-row">
-        <input type="time" class="plan-time" value="19:00">
-        <input type="text" class="plan-activity" placeholder="Dinner reservation 🍝">
+      <div class="controls">
+        <button id="removeSlotBtn" class="control-btn" title="Remove last slot">−</button>
+        <button id="addSlotBtn" class="control-btn" title="Add new slot">+</button>
       </div>
 
-      <div class="plan-row">
-        <input type="time" class="plan-time" value="21:00">
-        <input type="text" class="plan-activity" placeholder="Movie / Activity 🎬">
-      </div>
-
-      <div class="plan-row">
-        <input type="time" class="plan-time" value="23:00">
-        <input type="text" class="plan-activity" placeholder="Sweet dreams 😴">
-      </div>
-
-      <div style="text-align: center; margin-top: 20px;">
+      <div style="text-align: center; margin-top: 10px;">
         <p style="font-size: 14px; color: #888;">Screenshot this to save it! 📸</p>
       </div>
     </section>
@@ -271,7 +302,10 @@
     const result = document.getElementById("result");
     const nextBtn = document.getElementById("nextBtn");
     
-    const itinerary = document.getElementById("itinerary");
+    const itinerarySection = document.getElementById("itinerarySection");
+    const slotsContainer = document.getElementById("slotsContainer");
+    const addSlotBtn = document.getElementById("addSlotBtn");
+    const removeSlotBtn = document.getElementById("removeSlotBtn");
 
     /* --- CONFETTI SETUP --- */
     const confettiCanvas = document.getElementById("confettiCanvas");
@@ -357,24 +391,61 @@
 
     /* --- YES BUTTON LOGIC --- */
     yesBtn.addEventListener("click", () => {
-      // 1. Hide Question Phase
       questionPhase.style.display = "none";
-      
-      // 2. Show Result (Celebration)
       result.style.display = "block";
-      
-      // 3. Trigger Confetti
       resizeConfettiCanvas();
       fullScreenConfetti();
     });
 
     /* --- NEXT BUTTON LOGIC --- */
     nextBtn.addEventListener("click", () => {
-      // 1. Hide Celebration
       result.style.display = "none";
+      itinerarySection.style.display = "block";
+    });
+
+    /* --- ADD / REMOVE SLOT LOGIC --- */
+    
+    // Fun placeholders for new slots
+    const placeholders = [
+      "Dessert time? 🍦",
+      "Stargazing ✨",
+      "Late night drive 🏎️",
+      "Cuddle time 🧸",
+      "Coffee run ☕",
+      "Surprise activity 🎁"
+    ];
+
+    addSlotBtn.addEventListener("click", () => {
+      // Create the new elements
+      const newRow = document.createElement("div");
+      newRow.className = "plan-row";
       
-      // 2. Show Itinerary
-      itinerary.style.display = "block";
+      const newTime = document.createElement("input");
+      newTime.type = "time";
+      newTime.className = "plan-time";
+      
+      const newActivity = document.createElement("input");
+      newActivity.type = "text";
+      newActivity.className = "plan-activity";
+      
+      // Pick a random placeholder
+      const randomPlaceholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+      newActivity.placeholder = randomPlaceholder;
+
+      // Append to the row, then to the container
+      newRow.appendChild(newTime);
+      newRow.appendChild(newActivity);
+      slotsContainer.appendChild(newRow);
+
+      // Scroll to bottom so they see the new slot
+      newRow.scrollIntoView({ behavior: "smooth" });
+    });
+
+    removeSlotBtn.addEventListener("click", () => {
+      // Only remove if there are rows to remove
+      if (slotsContainer.children.length > 0) {
+        slotsContainer.lastElementChild.remove();
+      }
     });
 
   </script>
